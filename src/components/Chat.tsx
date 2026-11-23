@@ -10,7 +10,7 @@ function uid() {
 const WELCOME: ChatMessage = {
   id: 'welcome',
   role: 'model',
-  text: `¡Hola! Soy el asistente del consultorio del ${CLINIC_INFO.doctor}. Puedo orientarte sobre ortodoncia, prótesis, post extracción, higiene, horarios y servicios. Los turnos se piden en la pestaña Agenda. ¿En qué te ayudo?`,
+  text: `¡Hola! Soy el asistente del consultorio del ${CLINIC_INFO.doctor}. Puedo orientarte sobre cuidados, horarios y servicios. La evaluación no tiene costo; los turnos se piden en Agenda. ¿En qué te ayudo?`,
 }
 
 type Props = {

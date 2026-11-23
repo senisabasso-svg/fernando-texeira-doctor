@@ -69,7 +69,7 @@ export function Agenda() {
   const [phone, setPhone] = useState('')
   const [date, setDate] = useState(nextOpenDay())
   const [time, setTime] = useState('')
-  const [reason, setReason] = useState('consulta')
+  const [reason, setReason] = useState('evaluación (sin costo)')
   const [confirmed, setConfirmed] = useState<Booking | null>(null)
 
   const slots = useMemo(() => slotsForDate(date), [date])
@@ -83,7 +83,7 @@ export function Agenda() {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
-    if (!name.trim() || !date || !time || closedDay) return
+    if (!name.trim() || !phone.trim() || !date || !time || closedDay) return
     setConfirmed({
       name: name.trim(),
       phone: phone.trim(),
@@ -98,8 +98,8 @@ export function Agenda() {
       <div className="recs-intro">
         <h2>Agenda</h2>
         <p>
-          Elegí día y horario dentro de la atención del consultorio. Por ahora es una
-          reserva simulada (sin backend).
+          Nombre, teléfono y motivo. Lo ideal es pedir con una semana de anticipación.
+          Hay urgencias del día dentro del horario. Por ahora es una reserva simulada.
         </p>
       </div>
 
@@ -111,6 +111,7 @@ export function Agenda() {
           </div>
         ))}
       </div>
+      <p className="agenda-hours-note">{CLINIC_INFO.hoursNote}</p>
 
       {confirmed ? (
         <div className="agenda-success" role="status">
@@ -152,12 +153,13 @@ export function Agenda() {
           </label>
 
           <label className="field">
-            <span>Teléfono (opcional)</span>
+            <span>Teléfono</span>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="099…"
+              required
               autoComplete="tel"
             />
           </label>
@@ -201,11 +203,14 @@ export function Agenda() {
           <label className="field">
             <span>Motivo</span>
             <select value={reason} onChange={(e) => setReason(e.target.value)}>
-              <option value="consulta">Consulta general</option>
-              <option value="control ortodoncia">Control de ortodoncia</option>
+              <option value="evaluación (sin costo)">Evaluación — ≈ 10 min (sin costo)</option>
+              <option value="control ortodoncia">Ortodoncia — 15 a 30 min</option>
+              <option value="limpieza de sarro">Limpieza de sarro — ≈ 15 min</option>
+              <option value="resinas">Resinas — mín. 30 min</option>
+              <option value="extracción">Extracción — ≈ 30 min</option>
+              <option value="urgencia del día">Urgencia del día</option>
               <option value="prótesis">Prótesis / control</option>
-              <option value="dolor">Dolor / urgencia</option>
-              <option value="limpieza">Limpieza</option>
+              <option value="endodoncia">Endodoncia</option>
               <option value="otro">Otro</option>
             </select>
           </label>
@@ -213,7 +218,7 @@ export function Agenda() {
           <button
             type="submit"
             className="btn btn-primary agenda-submit"
-            disabled={!name.trim() || !time || closedDay}
+            disabled={!name.trim() || !phone.trim() || !time || closedDay}
           >
             Confirmar reserva
           </button>

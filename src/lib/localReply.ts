@@ -21,128 +21,111 @@ export function localClinicReply(userText: string): string {
 
   if (/(horario|atienden|abierto|cuando atienden|dias? de atencion)/.test(q)) {
     return [
-      'Horarios de atención:',
+      'Horarios (lunes a viernes):',
       ...CLINIC_INFO.hours.map((h) => `• ${h.days}: ${h.time}`),
       '',
+      CLINIC_INFO.hoursNote,
       `Dirección: ${CLINIC_INFO.address}.`,
-      'Para pedir turno, usá la pestaña Agenda.',
+      'Turnos: pestaña Agenda. Hay urgencias del día dentro del horario.',
     ].join('\n')
   }
 
-  if (/(turno|cita|agendar|sacar turno|reservar)/.test(q)) {
+  if (/(turno|cita|agendar|sacar turno|reservar|urgencia)/.test(q)) {
     return [
-      'Podés pedir tu turno desde la pestaña Agenda de esta web.',
+      'Pedí turno en la pestaña Agenda (nombre, teléfono y motivo).',
+      'Lo ideal es sacar turno con una semana de anticipación. Si sos flexible con el horario, en cualquier momento.',
+      'Hay turnos de urgencia en el día, dentro del horario de atención.',
       '',
-      'Horarios:',
-      ...CLINIC_INFO.hours.map((h) => `• ${h.days}: ${h.time}`),
+      'Duraciones aproximadas:',
+      ...CLINIC_INFO.appointmentDurations.map((d) => `• ${d.reason}: ${d.duration}`),
     ].join('\n')
   }
 
-  if (/(ubicacion|direccion|donde queda|telefono|llamar|contacto|instagram|email|correo)/.test(q)) {
+  if (/(evaluacion|evaluación|tiene costo|es gratis|sin costo|cobra la consulta)/.test(q)) {
     return [
-      'Datos del consultorio:',
+      'La evaluación no tiene costo.',
+      'Los precios de tratamientos (ortodoncia, extracción, etc.) se definen en el consultorio: hay que venir a evaluación.',
+      'Pedí turno en la pestaña Agenda.',
+    ].join('\n')
+  }
+
+  if (/(precio|cuanto sale|cuánto sale|cuotas|pago|pagos|cosalco|mercado pago)/.test(q)) {
+    return [
+      'No publico montos acá: se confirman en el consultorio (la evaluación es sin costo).',
+      '',
+      'Medios de pago:',
+      ...CLINIC_INFO.payments.map((p) => `• ${p}`),
+      '',
+      'Para evaluación u otros turnos: pestaña Agenda.',
+    ].join('\n')
+  }
+
+  if (/(ubicacion|direccion|donde queda|telefono|contacto|instagram)/.test(q)) {
+    return [
       `• Dirección: ${CLINIC_INFO.address}`,
       `• Tel.: ${phone}`,
-      `• Email: ${CLINIC_INFO.email}`,
       `• Instagram: ${CLINIC_INFO.instagram}`,
       '',
       'Turnos: pestaña Agenda.',
     ].join('\n')
   }
 
-  if (/(precio|cuanto sale|cuánto sale|cuotas|promo|promocion|obra social|mutualista)/.test(q)) {
+  if (/(implante|endodoncia|ninos|niños|blanqueamiento|servicios)/.test(q)) {
     return [
-      'Los valores y condiciones se definen según cada caso en la consulta; no tengo un listado vigente acá.',
-      'Las promociones cambian y se publican en Instagram.',
-      '',
-      `Para confirmar: Tel. ${phone}. Para turno: pestaña Agenda.`,
+      'Servicios: ortodoncia, implantes, prótesis, extracciones/cirugías, limpieza de sarro, resinas, blanqueamiento y endodoncia.',
+      'Atienden niños siempre y cuando se dejen atender.',
+      'Para evaluación (sin costo): pestaña Agenda.',
     ].join('\n')
   }
 
-  if (/(implante|implantologo)/.test(q)) {
-    return [
-      'Sí, el Dr. Texeira es implantólogo. Para saber si sos candidato hace falta una evaluación presencial.',
-      'Podés pedir turno en la pestaña Agenda.',
-    ].join('\n')
-  }
-
-  if (/(bracket|brackets|alambre|ortodoncia|aparato|cera|contencion|contención)/.test(q)) {
-    if (/(solto|soltó|despego|despegó)/.test(q)) {
+  if (/(bracket|brackets|alambre|ortodoncia|aparato)/.test(q)) {
+    if (/(solto|soltó|despego|despegó|despegue)/.test(q) && /(bracket|brackets)/.test(q)) {
       return [
-        'Pasa y no es una urgencia. No intentes pegarlo ni sacarlo vos.',
-        'Si te molesta el alambre, cubrilo con cera de ortodoncia.',
-        'Pedí turno en Agenda para que el doctor lo vuelva a colocar y no se retrase el tratamiento.',
+        'Si se despegó un bracket, pedí turno en Agenda y vení a recementar, sobre todo si el próximo control está lejos.',
+      ].join('\n')
+    }
+    if (/(alambre|pincha)/.test(q)) {
+      return [
+        'Si se soltó el alambre, a veces se puede acomodar con una pinza de cejas.',
+        'Si no podés y te pincha, venís al consultorio: pedí turno en Agenda.',
       ].join('\n')
     }
     if (/(duele|dolor|molest)/.test(q)) {
       return [
-        'Es normal sentir sensibilidad o presión los primeros 2 a 4 días después de colocar o ajustar.',
-        'Ayuda comer blando. Si el dolor es fuerte, aumenta o te impide comer, pedí turno en Agenda.',
+        'Después del ajuste puede molestar (no suele “doler”).',
+        'Si molesta mucho, podés tomar ibuprofeno.',
       ].join('\n')
     }
-    return [
-      'Cuidados de ortodoncia:',
-      ...tips('ortodoncia', 6),
-      '',
-      'Si hay bracket suelto, alambre que pincha o dolor intenso: Agenda.',
-    ].join('\n')
+    return ['Cuidados de ortodoncia:', ...tips('ortodoncia', 6)].join('\n')
   }
 
   if (/(protesis|prótesis|dentadura)/.test(q)) {
     if (/(rompio|rompió|roto|rota)/.test(q)) {
-      return [
-        'No la pegues con adhesivos caseros. Guardá todas las partes y pedí turno en Agenda.',
-      ].join('\n')
+      return 'Sacá turno en Agenda: se evalúa si se puede reparar o hay que hacer una nueva (ambas opciones tienen costo).'
     }
-    return [
-      'Cuidados de tu prótesis:',
-      ...tips('protesis', 5),
-      '',
-      'Si hay llaga, dolor persistente o se mueve: Agenda.',
-    ].join('\n')
+    return ['Cuidados de prótesis:', ...tips('protesis')].join('\n')
   }
 
   if (/(extraccion|extracción|saque|sacar muela|post operator|gasa)/.test(q)) {
     return [
-      'Indicaciones post extracción:',
+      'Indicaciones post extracción del consultorio:',
       ...tips('postextraccion'),
-      '',
-      `Urgencias (sangrado que no cede, fiebre, hinchazón que crece): Tel. ${phone}.`,
     ].join('\n')
   }
 
-  if (/(mate)/.test(q) && /(extraccion|extracción|saque|muela)/.test(q)) {
-    return 'Las primeras 48 horas después de una extracción conviene no tomar mate, no fumar, no aspirar ni hacer buches.'
-  }
-
-  if (/(cepill|hilo dental|enjuague|pasta|halitosis|mal aliento|bicarbonato|gaseosa|embaraz)/.test(q)) {
+  if (/(sarro|dolor|duele|duelen|caries|muela|diente|resina)/.test(q)) {
     return [
-      'Higiene y cuidados:',
-      ...tips('higiene'),
-    ].join('\n')
-  }
-
-  if (/(sarro|dolor|duele|duelen|inflam|encia|encía|caries|sangrado|muela|diente|bruxismo|trismus)/.test(q)) {
-    const urgente = /(mucho|intens|hinchaz|fiebre|no puedo dormir|hinchada)/.test(q)
-    return [
-      'Entiendo la molestia. No puedo diagnosticar por chat, pero sí orientarte:',
-      '',
-      '• Sarro, caries o dolor suelen necesitar evaluación presencial (limpieza, revisión).',
-      '• Mientras tanto: cepillo suave, evitá extremos de temperatura y no automediques antibióticos.',
-      urgente
-        ? `• Si el dolor es fuerte, hay hinchazón o fiebre, llamá al ${phone} y pedí atención pronto.`
-        : '• Si no mejora, pedí turno en la pestaña Agenda.',
-      '',
-      `Consultorio: ${CLINIC_INFO.address}.`,
+      'Para evaluar sarro, caries o dolor hace falta venir al consultorio.',
+      'La evaluación no tiene costo. Pedí turno en la pestaña Agenda.',
+      'Hay urgencias del día dentro del horario de atención.',
     ].join('\n')
   }
 
   return [
     'En este momento el asistente con IA está saturado.',
     '',
-    'Igual te puedo orientar:',
-    '• Cuidados: pestaña Recomendaciones (ortodoncia, prótesis, post extracción, higiene).',
-    '• Turnos: pestaña Agenda.',
-    `• Tel.: ${phone} · ${CLINIC_INFO.address}.`,
+    '• Recomendaciones: pestaña Recomendaciones',
+    '• Turnos: pestaña Agenda (evaluación sin costo)',
+    `• Tel.: ${phone} · ${CLINIC_INFO.address}`,
   ].join('\n')
 }

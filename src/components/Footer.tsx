@@ -12,7 +12,6 @@ export function Footer() {
       </div>
       <div className="footer-links">
         <a href={`tel:${CLINIC_INFO.phone}`}>Tel. {CLINIC_INFO.phoneDisplay}</a>
-        <a href={`mailto:${CLINIC_INFO.email}`}>{CLINIC_INFO.email}</a>
         <a href={CLINIC_INFO.instagramUrl} target="_blank" rel="noreferrer">
           {CLINIC_INFO.instagram}
         </a>
