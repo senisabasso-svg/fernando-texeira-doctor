@@ -22,12 +22,13 @@ const MODELS = [
 const REQUEST_TIMEOUT_MS = 18_000
 const RETRIES_PER_MODEL = 2
 
+const DEV_ERROR =
+  'El agente está en desarrollo — volvé a intentar en unos momentos.'
+
 function getApiKey(): string {
   const key = import.meta.env.VITE_GEMINI_API_KEY as string | undefined
   if (!key?.trim()) {
-    throw new Error(
-      'Falta la API key de Gemini. Creá un archivo .env con VITE_GEMINI_API_KEY=tu_clave',
-    )
+    throw new Error(DEV_ERROR)
   }
   return key.trim()
 }
@@ -134,23 +135,10 @@ export async function sendChatMessage(
     parts: [{ text: enrichedUserMessage }],
   })
 
-  let lastMessage =
-    'El asistente no pudo responder ahora. Reintentá en unos segundos.'
-
   for (const model of MODELS) {
     for (let attempt = 0; attempt < RETRIES_PER_MODEL; attempt++) {
       const result = await callModel(model, contents)
       if (result.ok) return result.text
-
-      lastMessage = result.message
-
-      if (
-        result.status === 403 ||
-        result.status === 401 ||
-        /suspended|permission denied|API key/i.test(result.message)
-      ) {
-        throw new Error(result.message)
-      }
 
       if (isBusy(result.status, result.message) || result.status === 404 || result.status === 0) {
         await sleep(500 * (attempt + 1))
@@ -161,9 +149,7 @@ export async function sendChatMessage(
     }
   }
 
-  throw new Error(
-    `${lastMessage} Reintentá en unos segundos para obtener una respuesta del asistente.`,
-  )
+  throw new Error(DEV_ERROR)
 }
 
 export function hasGeminiKey(): boolean {

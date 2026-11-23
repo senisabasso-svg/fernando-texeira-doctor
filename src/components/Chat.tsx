@@ -49,7 +49,9 @@ export function Chat({ onOpenAgenda }: Props) {
       setMessages((prev) => [...prev, { id: uid(), role: 'model', text: reply }])
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : 'No se pudo obtener respuesta. Intentá de nuevo.'
+        err instanceof Error && err.message.includes('agente está en desarrollo')
+          ? err.message
+          : 'El agente está en desarrollo — volvé a intentar en unos momentos.'
       setError(msg)
     } finally {
       setLoading(false)

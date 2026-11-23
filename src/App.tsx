@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Agenda } from './components/Agenda'
 import { Chat } from './components/Chat'
+import { DevNoticeModal } from './components/DevNoticeModal'
 import { Footer } from './components/Footer'
 import { Header, type Tab } from './components/Header'
 import { Recommendations } from './components/Recommendations'
@@ -20,6 +21,7 @@ export default function App() {
         {tab === 'agenda' && <Agenda />}
       </main>
       <Footer />
+      <DevNoticeModal />
     </div>
   )
 }
