@@ -94,8 +94,25 @@ export async function adminUploadAsset(token: string, key: string, file: File) {
   return parseJson<{ asset: SiteAsset }>(res)
 }
 
-export async function adminFetchChatLogs(token: string, page = 1) {
-  const res = await fetch(`${API_BASE}/api/chat-logs?page=${page}&pageSize=40`, {
+export type ChatLogFilters = {
+  page?: number
+  pageSize?: number
+  from?: string
+  to?: string
+  q?: string
+  topic?: string
+}
+
+export async function adminFetchChatLogs(token: string, filters: ChatLogFilters = {}) {
+  const params = new URLSearchParams()
+  params.set('page', String(filters.page ?? 1))
+  params.set('pageSize', String(filters.pageSize ?? 40))
+  if (filters.from) params.set('from', filters.from)
+  if (filters.to) params.set('to', filters.to)
+  if (filters.q?.trim()) params.set('q', filters.q.trim())
+  if (filters.topic && filters.topic !== 'todos') params.set('topic', filters.topic)
+
+  const res = await fetch(`${API_BASE}/api/chat-logs?${params}`, {
     headers: authHeaders(token),
   })
   return parseJson<{
@@ -103,6 +120,7 @@ export async function adminFetchChatLogs(token: string, page = 1) {
     page: number
     pageSize: number
     items: ChatLogItem[]
+    topicStats?: Record<string, number>
   }>(res)
 }
 
