@@ -1,27 +1,13 @@
-import { useState } from 'react'
-import { Agenda } from './components/Agenda'
-import { Chat } from './components/Chat'
-import { DevNoticeModal } from './components/DevNoticeModal'
-import { Footer } from './components/Footer'
-import { Header, type Tab } from './components/Header'
-import { Recommendations } from './components/Recommendations'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { AgentApp } from './pages/AgentApp'
+import { ClinicWeb } from './pages/ClinicWeb'
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('chat')
-
   return (
-    <div className="app-shell">
-      <div className="ambient" aria-hidden="true" />
-      <Header activeTab={tab} onTabChange={setTab} />
-      <main className="main-stage">
-        {tab === 'chat' && <Chat onOpenAgenda={() => setTab('agenda')} />}
-        {tab === 'recomendaciones' && (
-          <Recommendations onOpenAgenda={() => setTab('agenda')} />
-        )}
-        {tab === 'agenda' && <Agenda />}
-      </main>
-      <Footer />
-      <DevNoticeModal />
-    </div>
+    <Routes>
+      <Route path="/" element={<AgentApp />} />
+      <Route path="/web" element={<ClinicWeb />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }

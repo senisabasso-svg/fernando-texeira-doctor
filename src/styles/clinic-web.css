@@ -1,0 +1,1022 @@
+/* Clinic marketing — redesign polish on gpt-taste base (Outfit, clinic teal) */
+
+.clinic-web-active {
+  scroll-behavior: smooth;
+}
+
+.clinic-web-active body {
+  background: #0a1520;
+}
+
+.clinic-web {
+  --cw-teal: #2a9fad;
+  --cw-teal-deep: #1a7f8a;
+  --cw-navy: #0a1520;
+  --cw-ink: #e6eef2;
+  --cw-muted: #8b9eab;
+  --cw-line: rgba(232, 240, 244, 0.1);
+  --cw-bg: #0a1520;
+  --cw-surface: rgba(232, 240, 244, 0.045);
+  --cw-shadow: 0 24px 56px rgba(4, 16, 28, 0.55);
+  --cw-z-grain: 80;
+  --cw-z-nav: 50;
+  --cw-z-fab: 60;
+  --cw-font: 'Outfit', system-ui, sans-serif;
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  background:
+    radial-gradient(ellipse 85% 55% at 8% -8%, rgba(42, 159, 173, 0.14), transparent 52%),
+    radial-gradient(ellipse 65% 45% at 92% 18%, rgba(20, 70, 100, 0.28), transparent 48%),
+    var(--cw-bg);
+  color: var(--cw-ink);
+  font-family: var(--cw-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.clinic-web * {
+  box-sizing: border-box;
+}
+
+.clinic-web a:not([class]) {
+  color: inherit;
+}
+
+.cw-grain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--cw-z-grain);
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.cw-skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #0a1520;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.cw-skip:focus {
+  top: 1rem;
+}
+
+.clinic-web :focus-visible {
+  outline: 2px solid var(--cw-teal);
+  outline-offset: 3px;
+}
+
+/* —— Floating glass pill nav —— */
+.cw-nav-wrap {
+  position: sticky;
+  top: 0;
+  z-index: var(--cw-z-nav);
+  display: flex;
+  justify-content: center;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  pointer-events: none;
+}
+
+.cw-nav-pill {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 1100px;
+  width: 100%;
+  padding: 0.55rem 0.65rem 0.55rem 1rem;
+  border-radius: 999px;
+  background: rgba(10, 22, 34, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 14px 40px rgba(4, 16, 28, 0.4);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+.cw-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  min-width: 0;
+  flex-shrink: 1;
+  border-radius: 0.5rem;
+}
+
+.cw-brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 0.7rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cw-brand strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cw-links {
+  display: none;
+  gap: 1.1rem;
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cw-muted);
+}
+
+.cw-links a {
+  text-decoration: none;
+  border-radius: 0.35rem;
+  transition: color 0.25s ease;
+}
+
+.cw-links a:hover {
+  color: #fff;
+}
+
+.cw-nav-cta {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  background: #f4f8fa;
+  color: #0a1520;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.cw-nav-cta:hover {
+  background: var(--cw-teal);
+  color: #041016;
+}
+
+.cw-nav-cta:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 900px) {
+  .cw-links {
+    display: flex;
+  }
+  .cw-nav-cta {
+    margin-left: 0;
+  }
+}
+
+/* —— Hero: banner keeps native ~3.4:1; square case photo stays 1:1 —— */
+.cw-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 0 clamp(3rem, 8vw, 5rem);
+}
+
+.cw-hero-banner {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  /* Keep native 1920×560 ratio — no max-height that forces extra crop */
+  aspect-ratio: 1920 / 560;
+  overflow: hidden;
+  background: #0c1a24;
+}
+
+.cw-hero-banner img {
+  width: 100%;
+  height: 100%;
+  /* Same ratio as box → cover shows the full photo */
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.cw-hero-banner-veil {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  /* Soft fade into page — keep the doctor photo readable, not crushed */
+  background: linear-gradient(
+    180deg,
+    rgba(10, 21, 32, 0.08) 0%,
+    rgba(10, 21, 32, 0.2) 55%,
+    var(--cw-bg) 100%
+  );
+}
+
+.cw-hero-lower {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+  /* No negative pull over the banner — avoids covering faces */
+  margin-top: 0;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 5vw, 4rem) 0;
+}
+
+.cw-hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 64rem;
+}
+
+.cw-hero-clinic {
+  margin: 0 0 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--cw-teal);
+}
+
+.cw-hero-title {
+  margin: 0;
+  max-width: 64rem;
+  font-size: clamp(2.75rem, 6.5vw, 5.25rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #f7fafb;
+  text-wrap: balance;
+}
+
+.cw-hero-lead {
+  margin: 1.5rem 0 0;
+  max-width: 34rem;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(220, 232, 238, 0.88);
+  font-weight: 400;
+  text-wrap: pretty;
+}
+
+.cw-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2.25rem;
+}
+
+.cw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.55rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.cw-btn:hover {
+  transform: translateY(-2px);
+}
+
+.cw-btn:active {
+  transform: scale(0.98);
+}
+
+.clinic-web a.cw-btn-solid,
+.cw-btn-solid {
+  background: #f4f8fa;
+  color: #0a1520;
+}
+
+.clinic-web a.cw-btn-solid:hover,
+.cw-btn-solid:hover {
+  background: var(--cw-teal);
+  color: #041016;
+}
+
+.clinic-web a.cw-btn-ghost,
+.cw-btn-ghost {
+  background: transparent;
+  color: #f4f8fa;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.clinic-web a.cw-btn-ghost:hover,
+.cw-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.cw-btn-xl {
+  padding: 1.15rem 2.2rem;
+  font-size: 1.05rem;
+}
+
+.clinic-web a.cw-nav-cta {
+  background: #f4f8fa;
+  color: #0a1520;
+}
+
+.clinic-web a.cw-nav-cta:hover {
+  background: var(--cw-teal);
+  color: #041016;
+}
+
+.cw-hero-float {
+  position: relative;
+  z-index: 2;
+  justify-self: start;
+  width: min(100%, 320px);
+}
+
+.cw-hero-float-frame {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    var(--cw-shadow);
+  background: #0c1a24;
+}
+
+.cw-hero-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform 0.7s ease;
+}
+
+.group:hover .cw-hero-photo {
+  transform: scale(1.03);
+}
+
+@media (min-width: 960px) {
+  .cw-hero-lower {
+    grid-template-columns: 1.25fr minmax(260px, 360px);
+    align-items: end;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .cw-hero-float {
+    justify-self: end;
+    width: 100%;
+  }
+}
+
+/* —— Marquee —— */
+.cw-marquee-band {
+  overflow: hidden;
+  border-block: 1px solid var(--cw-line);
+  padding: 1.15rem 0 1.35rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cw-marquee-track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: cw-marquee 32s linear infinite;
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: none;
+}
+
+.cw-marquee-track span::after {
+  content: '·';
+  margin-left: 3rem;
+  opacity: 0.35;
+}
+
+@keyframes cw-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* —— Interest —— */
+.cw-interest {
+  padding: clamp(4.5rem, 11vw, 8.5rem) clamp(1.25rem, 5vw, 4rem) clamp(5.5rem, 13vw, 10rem);
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.cw-section-title {
+  margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+  max-width: 56rem;
+  font-size: clamp(2.2rem, 4.5vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  color: #f7fafb;
+  text-wrap: balance;
+}
+
+.cw-inline-pill {
+  display: inline-block;
+  width: clamp(4.5rem, 8vw, 6.5rem);
+  height: clamp(1.7rem, 3vw, 2.35rem);
+  margin: 0 0.45rem;
+  border-radius: 999px;
+  background-size: cover;
+  background-position: center;
+  vertical-align: middle;
+  filter: contrast(1.12) grayscale(0.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+/*
+  Clinical photos are ~700×500 (ratio 1.4).
+  Grid respects landscape frames — no tall 2-row crop that bisects faces.
+  2×2: A | B / C | D  → 4 cells filled, dense.
+*/
+.cw-bento {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  grid-auto-flow: dense;
+  gap: 0.9rem;
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.cw-bento-cell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.1rem;
+  border: 1px solid var(--cw-line);
+  background: var(--cw-surface);
+  text-decoration: none;
+  transition: border-color 0.25s ease;
+}
+
+.cw-bento-cell:hover {
+  border-color: rgba(42, 159, 173, 0.35);
+}
+
+.cw-bento-a,
+.cw-bento-c,
+.cw-bento-d {
+  aspect-ratio: 7 / 5;
+}
+
+.cw-bento-a {
+  border-radius: 1.25rem;
+}
+
+.cw-bento-b {
+  padding: clamp(1.35rem, 3vw, 2.1rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 100%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.cw-bento-b h3 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  letter-spacing: -0.02em;
+  color: #f7fafb;
+  text-wrap: balance;
+}
+
+.cw-bento-b p {
+  margin: 0;
+  color: var(--cw-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 42ch;
+}
+
+.cw-text-link {
+  color: var(--cw-teal);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-top: 0.35rem;
+  width: fit-content;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.clinic-web a.cw-text-link {
+  color: var(--cw-teal);
+}
+
+.cw-text-link:hover,
+.clinic-web a.cw-text-link:hover {
+  color: #7fd4de;
+}
+
+.cw-bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  transition: transform 0.7s ease;
+}
+
+.group:hover .cw-bento-img {
+  transform: scale(1.03);
+}
+
+.cw-bento-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.15rem 1.25rem;
+  background: linear-gradient(transparent, rgba(6, 16, 24, 0.88));
+}
+
+.cw-bento-overlay h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #f7fafb;
+  letter-spacing: -0.02em;
+}
+
+.cw-bento-overlay p {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 28ch;
+  line-height: 1.4;
+}
+
+/* Small PNG icons: contain, never cover-crop */
+.cw-icon-row {
+  list-style: none;
+  margin: 0 0 clamp(3rem, 8vw, 5rem);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.cw-icon-row li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.1rem 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid var(--cw-line);
+  background: rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.cw-icon-row img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.cw-icon-row span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(247, 250, 251, 0.85);
+}
+
+@media (max-width: 800px) {
+  .cw-bento {
+    grid-template-columns: 1fr;
+  }
+
+  .cw-bento-a,
+  .cw-bento-c,
+  .cw-bento-d {
+    aspect-ratio: 7 / 5;
+  }
+
+  .cw-icon-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Horizontal accordions */
+.cw-accordion {
+  display: flex;
+  gap: 0.65rem;
+  min-height: clamp(280px, 42vw, 420px);
+  width: 100%;
+}
+
+.cw-acc-slice {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--cw-line);
+  border-radius: 1.05rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  font: inherit;
+  transition: flex 0.55s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, border-color 0.25s ease;
+}
+
+.cw-acc-slice.is-open {
+  flex: 3.2 1 0;
+  background: rgba(42, 159, 173, 0.07);
+  border-color: rgba(42, 159, 173, 0.28);
+}
+
+.cw-acc-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 1.25rem 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #f7fafb;
+  flex-shrink: 0;
+}
+
+.cw-acc-slice.is-open .cw-acc-title {
+  writing-mode: horizontal-tb;
+  transform: none;
+  padding: 1.35rem 1.35rem 0.5rem;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  letter-spacing: -0.03em;
+}
+
+.cw-acc-body {
+  display: none;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0 1.35rem 1.35rem;
+  min-width: 0;
+}
+
+.cw-acc-slice.is-open .cw-acc-body {
+  display: flex;
+}
+
+.cw-acc-img {
+  width: 100%;
+  aspect-ratio: 7 / 5;
+  height: auto;
+  object-fit: cover;
+  object-position: center 40%;
+  border-radius: 0.75rem;
+  background: #0c1a24;
+  transition: transform 0.7s ease;
+}
+
+.cw-acc-slice.is-open:hover .cw-acc-img {
+  transform: scale(1.02);
+}
+
+.cw-acc-body p {
+  margin: 0;
+  color: var(--cw-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 42ch;
+}
+
+.cw-acc-body a {
+  color: var(--cw-teal);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  width: fit-content;
+  border-radius: 0.25rem;
+}
+
+.cw-acc-body a:hover {
+  color: #7fd4de;
+}
+
+@media (max-width: 700px) {
+  .cw-accordion {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .cw-acc-slice,
+  .cw-acc-slice.is-open {
+    flex: 0 0 auto;
+  }
+  .cw-acc-title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    padding: 1rem 1.15rem;
+  }
+}
+
+/* —— Desire —— */
+.cw-desire {
+  padding: clamp(4.5rem, 12vw, 9rem) clamp(1.25rem, 5vw, 4rem) clamp(5.5rem, 14vw, 11rem);
+}
+
+.cw-scrub {
+  margin: 0 auto clamp(4rem, 10vw, 7rem);
+  max-width: 42rem;
+  text-align: center;
+  font-size: clamp(1.65rem, 3.8vw, 2.85rem);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+  color: #f7fafb;
+  text-wrap: balance;
+}
+
+.cw-scrub-word {
+  display: inline;
+}
+
+.cw-stack {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+.cw-stack-card {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.25rem 1.4rem;
+  border-radius: 1.25rem;
+  background: rgba(12, 26, 36, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 22px 48px rgba(4, 16, 28, 0.45);
+}
+
+.cw-stack-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 1.15rem;
+  object-fit: cover;
+  filter: contrast(1.1);
+}
+
+.cw-stack-card blockquote {
+  margin: 0;
+}
+
+.cw-stack-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #f7fafb;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.cw-stack-card cite {
+  display: block;
+  margin-top: 0.45rem;
+  font-style: italic;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--cw-muted);
+}
+
+.cw-gallery-strip {
+  display: grid;
+  /* Match clinical photo ratio ~700×500 */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .cw-gallery-strip {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cw-gallery-frame {
+  overflow: hidden;
+  border-radius: 0.9rem;
+  aspect-ratio: 7 / 5;
+  border: 1px solid var(--cw-line);
+  background: #0c1a24;
+}
+
+.cw-scale-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  transition: transform 0.7s ease;
+}
+
+.group:hover .cw-scale-img {
+  transform: scale(1.03);
+}
+
+@media (max-width: 700px) {
+  .cw-gallery-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cw-stack-card {
+    grid-template-columns: 64px 1fr;
+  }
+  .cw-stack-photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 0.9rem;
+  }
+}
+
+/* —— Action —— */
+.cw-action {
+  padding: clamp(3.5rem, 9vw, 6.5rem) clamp(1.25rem, 5vw, 4rem) clamp(4.5rem, 11vw, 8rem);
+}
+
+.cw-action-panel {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(3.4rem, 8.5vw, 5.4rem);
+  border-radius: 1.75rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(42, 159, 173, 0.22), transparent 55%),
+    linear-gradient(160deg, #0f2230, #071018);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    var(--cw-shadow);
+}
+
+.cw-action-panel h2 {
+  margin: 0 auto;
+  font-size: clamp(2rem, 4.5vw, 3.35rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  color: #f7fafb;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.cw-action-panel p {
+  margin: 1.25rem auto 2rem;
+  max-width: 38rem;
+  color: var(--cw-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* —— Footer —— */
+.cw-footer {
+  display: grid;
+  gap: 1.75rem;
+  padding: 3rem clamp(1.25rem, 5vw, 4rem) 6.5rem;
+  border-top: 1px solid var(--cw-line);
+  color: var(--cw-muted);
+  font-size: 0.9rem;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.cw-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cw-footer-brand img {
+  border-radius: 0.85rem;
+}
+
+.cw-footer-brand strong {
+  display: block;
+  color: #f7fafb;
+  font-size: 1rem;
+}
+
+.cw-footer-brand span {
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.cw-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.5rem;
+}
+
+.cw-footer-meta a {
+  text-decoration: none;
+  color: #f4f8fa;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.cw-footer-meta a:hover {
+  color: var(--cw-teal);
+}
+
+.cw-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.cw-footer-links a {
+  text-decoration: none;
+  color: var(--cw-teal);
+  font-weight: 600;
+  border-radius: 0.25rem;
+}
+
+.cw-footer-links a:hover {
+  color: #7fd4de;
+}
+
+@media (min-width: 900px) {
+  .cw-footer {
+    grid-template-columns: 1.2fr 1.2fr auto;
+    align-items: start;
+  }
+}
+
+/* FAB — brand teal (single accent); WhatsApp stays in copy/CTAs */
+.cw-fab {
+  position: fixed;
+  right: 1.15rem;
+  bottom: 1.15rem;
+  z-index: var(--cw-z-fab);
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  background: var(--cw-teal);
+  color: #041016;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(4, 16, 28, 0.45);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.cw-fab:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.cw-fab:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 900px) {
+  .cw-fab {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clinic-web-active {
+    scroll-behavior: auto;
+  }
+  .cw-marquee-track {
+    animation: none;
+  }
+  .cw-btn,
+  .cw-nav-cta,
+  .cw-fab,
+  .cw-bento-img,
+  .cw-hero-photo,
+  .cw-scale-img,
+  .cw-acc-slice {
+    transition: none;
+  }
+}

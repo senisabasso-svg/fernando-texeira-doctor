@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { CLINIC_INFO } from '../data/clinicContext'
 
 export type Tab = 'chat' | 'recomendaciones' | 'agenda'
@@ -17,6 +18,9 @@ export function Header({ activeTab, onTabChange }: Props) {
   return (
     <header className="site-header">
       <div className="brand">
+        <Link to="/web" className="web-chip" title="Ir a la web del consultorio">
+          Web
+        </Link>
         <img src="/logo.png" alt="" className="brand-logo" width={48} height={48} />
         <div className="brand-text">
           <span className="brand-eyebrow">{CLINIC_INFO.name}</span>

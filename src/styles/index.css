@@ -94,6 +94,31 @@ a {
   min-width: 0;
 }
 
+.web-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--navy);
+  border-radius: 999px;
+  padding: 0.42rem 0.75rem;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.web-chip:hover {
+  background: var(--teal-deep);
+}
+
+.web-chip:active {
+  transform: scale(0.97);
+}
+
 .brand-logo {
   width: 48px;
   height: 48px;
