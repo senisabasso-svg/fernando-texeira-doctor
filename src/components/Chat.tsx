@@ -1,10 +1,20 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { CLINIC_INFO } from '../data/clinicContext'
 import { SUGGESTED_PROMPTS } from '../data/recommendations'
+import { logChatQuestion } from '../lib/api'
 import { hasGeminiKey, sendChatMessage, type ChatMessage } from '../lib/gemini'
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+}
+
+function getSessionId() {
+  const key = 'ft_chat_session'
+  const existing = sessionStorage.getItem(key)
+  if (existing) return existing
+  const next = uid()
+  sessionStorage.setItem(key, next)
+  return next
 }
 
 const WELCOME: ChatMessage = {
@@ -47,12 +57,22 @@ export function Chat({ onOpenAgenda }: Props) {
         trimmed,
       )
       setMessages((prev) => [...prev, { id: uid(), role: 'model', text: reply }])
+      void logChatQuestion({
+        question: trimmed,
+        answer: reply,
+        sessionId: getSessionId(),
+      })
     } catch (err) {
       const msg =
         err instanceof Error && err.message.includes('agente está en desarrollo')
           ? err.message
           : 'El agente está en desarrollo — volvé a intentar en unos momentos.'
       setError(msg)
+      void logChatQuestion({
+        question: trimmed,
+        answer: `[error] ${msg}`,
+        sessionId: getSessionId(),
+      })
     } finally {
       setLoading(false)
       inputRef.current?.focus()

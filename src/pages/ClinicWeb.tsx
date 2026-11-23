@@ -1,39 +1,17 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { CLINIC_INFO } from '../data/clinicContext'
-import { CLINIC_WEB_ASSETS as IMG } from '../data/clinicWebAssets'
+import { fetchAssets } from '../lib/api'
+import { mapAssetsFromApi, type WebAssets } from '../lib/webAssets'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const WA_MSG = `${CLINIC_INFO.whatsappLink}?text=${encodeURIComponent(
   'Hola, quisiera coordinar una consulta con el Dr. Fernando Texeira Núñez.',
 )}`
-
-const TREATMENTS = [
-  {
-    title: 'Ortodoncia',
-    body: 'Brackets autoligantes bucales y linguales para alinear con precisión y menos molestias.',
-    image: IMG.gallery[0],
-  },
-  {
-    title: 'Implantes',
-    body: 'Raíces de titanio que se integran al hueso y recuperan función masticatoria y estética.',
-    image: IMG.gallery[1],
-  },
-  {
-    title: 'Prótesis',
-    body: 'Completas o parciales, pensadas para masticar bien y verse naturales en el día a día.',
-    image: IMG.gallery[2],
-  },
-  {
-    title: 'Cirugía',
-    body: 'Extracciones, dientes retenidos y correcciones mandibulares con protocolo claro.',
-    image: IMG.gallery[3],
-  },
-] as const
 
 const MARQUEE = [
   'Ortodoncia',
@@ -48,32 +26,60 @@ const MARQUEE = [
 const MANIFESTO =
   'Cada consulta empieza con una evaluación honesta, criterio clínico y un trato cercano en el centro de Salto.'
 
-const STACK_CARDS = [
-  {
-    name: 'Fran',
-    text: 'Responsabilidad. El mejor.',
-    photo: IMG.people.fran,
-  },
-  {
-    name: 'Jenny',
-    text: 'Buena onda en cada visita.',
-    photo: IMG.people.paciente,
-  },
-  {
-    name: 'Anto',
-    text: 'Ortodoncia para niños: confianza total.',
-    photo: IMG.people.ella,
-  },
-  {
-    name: 'Kevin',
-    text: 'Seguimos el tratamiento. Diez puntos.',
-    photo: IMG.gallery[5],
-  },
-] as const
+function buildTreatments(IMG: WebAssets) {
+  return [
+    {
+      title: 'Ortodoncia',
+      body: 'Brackets autoligantes bucales y linguales para alinear con precisión y menos molestias.',
+      image: IMG.gallery[0],
+    },
+    {
+      title: 'Implantes',
+      body: 'Raíces de titanio que se integran al hueso y recuperan función masticatoria y estética.',
+      image: IMG.gallery[1],
+    },
+    {
+      title: 'Prótesis',
+      body: 'Completas o parciales, pensadas para masticar bien y verse naturales en el día a día.',
+      image: IMG.gallery[2],
+    },
+    {
+      title: 'Cirugía',
+      body: 'Extracciones, dientes retenidos y correcciones mandibulares con protocolo claro.',
+      image: IMG.gallery[3],
+    },
+  ]
+}
+
+function buildStackCards(IMG: WebAssets) {
+  return [
+    { name: 'Fran', text: 'Responsabilidad. El mejor.', photo: IMG.people.fran },
+    { name: 'Jenny', text: 'Buena onda en cada visita.', photo: IMG.people.paciente },
+    { name: 'Anto', text: 'Ortodoncia para niños: confianza total.', photo: IMG.people.ella },
+    { name: 'Kevin', text: 'Seguimos el tratamiento. Diez puntos.', photo: IMG.gallery[5] },
+  ]
+}
 
 export function ClinicWeb() {
   const rootRef = useRef<HTMLElement>(null)
   const [openAccordion, setOpenAccordion] = useState(0)
+  const [IMG, setIMG] = useState<WebAssets>(() => mapAssetsFromApi([]))
+  const TREATMENTS = buildTreatments(IMG)
+  const STACK_CARDS = buildStackCards(IMG)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchAssets()
+      .then((assets) => {
+        if (!cancelled && assets.length) setIMG(mapAssetsFromApi(assets))
+      })
+      .catch(() => {
+        /* fallback estático */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useGSAP(
     () => {
