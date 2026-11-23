@@ -177,7 +177,7 @@ export function Agenda() {
 
           {closedDay && (
             <p className="agenda-closed" role="status">
-              Ese día el consultorio no atiende. Elegí lunes a viernes.
+              Ese día no hay agenda disponible. Elegí un día de lunes a viernes.
             </p>
           )}
 

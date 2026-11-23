@@ -137,8 +137,8 @@ export const RECOMMENDATIONS: Recommendation[] = [
     id: 'cli-horarios',
     category: 'consultorio',
     title: 'Horarios',
-    body: 'Lunes y viernes 10–16 hs. Martes a jueves 14–19 hs. Solo de lunes a viernes. No hay urgencias fuera de horario.',
-    tip: 'Sí hay turnos de urgencia en el día, dentro del horario.',
+    body: 'Lunes y viernes 10–16 hs. Martes a jueves 14–19 hs. Atención de lunes a viernes.',
+    tip: 'Dentro del horario puede haber turnos de urgencia del día.',
   },
   {
     id: 'cli-evaluacion',
@@ -163,7 +163,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     id: 'cli-ninos',
     category: 'consultorio',
     title: 'Niños y endodoncia',
-    body: 'Atienden niños siempre y cuando se dejen atender. También realizan endodoncia.',
+    body: 'También atienden niños y realizan endodoncia.',
   },
 ]
 

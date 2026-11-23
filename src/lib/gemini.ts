@@ -1,5 +1,8 @@
-import { CLINIC_SYSTEM_PROMPT } from '../data/clinicContext'
-import { localClinicReply } from './localReply'
+import {
+  CLINIC_SYSTEM_PROMPT,
+  buildUserPromptWithContext,
+} from '../data/clinicContext'
+import { retrieveKnowledgeContext } from '../data/knowledgeChunks'
 
 export type ChatMessage = {
   id: string
@@ -16,7 +19,8 @@ const MODELS = [
   'gemini-3.5-flash',
 ] as const
 
-const REQUEST_TIMEOUT_MS = 12_000
+const REQUEST_TIMEOUT_MS = 18_000
+const RETRIES_PER_MODEL = 2
 
 function getApiKey(): string {
   const key = import.meta.env.VITE_GEMINI_API_KEY as string | undefined
@@ -42,6 +46,10 @@ function isBusy(status: number, message: string): boolean {
     status === 429 ||
     /high demand|overloaded|try again later|UNAVAILABLE|RESOURCE_EXHAUSTED/i.test(message)
   )
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 async function callModel(
@@ -103,6 +111,10 @@ async function callModel(
   }
 }
 
+/**
+ * Toda respuesta del chat DEBE pasar por Gemini con contexto.
+ * No hay respuestas automáticas locales.
+ */
 export async function sendChatMessage(
   history: ChatMessage[],
   userText: string,
@@ -114,32 +126,44 @@ export async function sendChatMessage(
       parts: [{ text: m.text }],
     }))
 
+  const retrieved = retrieveKnowledgeContext(userText)
+  const enrichedUserMessage = buildUserPromptWithContext(userText, retrieved)
+
   contents.push({
     role: 'user',
-    parts: [{ text: userText }],
+    parts: [{ text: enrichedUserMessage }],
   })
 
+  let lastMessage =
+    'El asistente no pudo responder ahora. Reintentá en unos segundos.'
+
   for (const model of MODELS) {
-    const result = await callModel(model, contents)
-    if (result.ok) return result.text
+    for (let attempt = 0; attempt < RETRIES_PER_MODEL; attempt++) {
+      const result = await callModel(model, contents)
+      if (result.ok) return result.text
 
-    // Errores de auth / proyecto: no seguir ni caer al fallback silencioso
-    if (
-      result.status === 403 ||
-      result.status === 401 ||
-      /suspended|permission denied|API key/i.test(result.message)
-    ) {
-      throw new Error(result.message)
-    }
+      lastMessage = result.message
 
-    if (!isBusy(result.status, result.message) && result.status !== 404) {
-      // 404 de modelo: probar el siguiente
-      if (result.status !== 0) continue
+      if (
+        result.status === 403 ||
+        result.status === 401 ||
+        /suspended|permission denied|API key/i.test(result.message)
+      ) {
+        throw new Error(result.message)
+      }
+
+      if (isBusy(result.status, result.message) || result.status === 404 || result.status === 0) {
+        await sleep(500 * (attempt + 1))
+        continue
+      }
+
+      break
     }
   }
 
-  // Gemini saturado → responder igual con conocimiento del consultorio
-  return localClinicReply(userText)
+  throw new Error(
+    `${lastMessage} Reintentá en unos segundos para obtener una respuesta del asistente.`,
+  )
 }
 
 export function hasGeminiKey(): boolean {
